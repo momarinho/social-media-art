@@ -5,15 +5,29 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const AddPost = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [caption, setCaption] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
+  const [userName, setUserName] = useState('');
+  const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [user] = useAuthState(auth);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      setUserEmail(user.email);
+      setUserName(user.displayName);
+    } else {
+      setUserEmail('');
+      setUserName('');
+    }
+  }, [user]);
 
   const handleUpload = (event) => {
     const file = event.target.files[0];
@@ -35,15 +49,6 @@ const AddPost = () => {
       });
   };
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      if (user) {
-        setUserEmail(user.email); // set userEmail state variable
-      }
-    });
-  }, []);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -56,12 +61,16 @@ const AddPost = () => {
         imageUrl,
         caption,
         userEmail,
+        userName,
+        content,
         createdAt: new Date(),
       });
       console.log('New post added with ID:', docRef.id);
       setImageUrl('');
       setCaption('');
+      setContent('');
       setUserEmail('');
+      setUserName('');
       setIsLoading(false);
       navigate(-1);
     } catch (error) {
@@ -83,7 +92,7 @@ const AddPost = () => {
             >
               Image
             </label>
-            <input type="file" onChange={handleUpload} />
+            <input type="file" onChange={handleUpload} required />
           </div>
           <div className="mb-5">
             <label
@@ -99,6 +108,19 @@ const AddPost = () => {
               placeholder="Enter caption"
               value={caption}
               onChange={(event) => setCaption(event.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-bold text-gray-700">
+              Content
+            </label>
+            <textarea
+              className="w-full border rounded py-2 px
+              -3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="content"
+              value={content}
+              onChange={(event) => setContent(event.target.value)}
             />
           </div>
           <button

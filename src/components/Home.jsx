@@ -24,7 +24,7 @@ const Home = () => {
     });
     return () => unsubscribe();
   }, []);
-
+  
   // useEffect(() => {
   //   const unsubscribe = auth.onAuthStateChanged((user) => {
   //     setUser(user);
@@ -42,8 +42,8 @@ const Home = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container mx-auto mt-10">
-          <div className="flex flex-wrap justify-center">
+        <div className="flex justify-center mt-4 mx-auto min-h-screen">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {sortedPosts.map((post) => (
               <div
                 key={post.id}
@@ -53,7 +53,7 @@ const Home = () => {
                   <img
                     src={post.imageUrl}
                     alt={post.caption}
-                    className="w-full h-80 object-cover"
+                    className="w-full h-96 object-cover"
                     onLoad={() => setIsLoading(false)}
                     onError={() => setIsLoading(false)}
                   />
@@ -61,11 +61,11 @@ const Home = () => {
                 <div className="px-3 pt-3 pb-2">
                   <div className="flex items-center">
                     <img
-                      src={user?.photoURL}
+                      src={post.imageUrl}
                       alt="User Profile"
                       className="w-8 h-8 rounded-full object-cover"
                     />
-                    <p className="ml-2 font-bold text-sm">{post.userEmail}</p>
+                    <p className="ml-2 font-bold text-sm">{post.userName}</p>
                   </div>
                   <p className="text-sm">{post.caption}</p>
                 </div>
