@@ -56,6 +56,7 @@ const AddPost = () => {
         imageUrl,
         caption,
         userEmail,
+        createdAt: new Date(),
       });
       console.log('New post added with ID:', docRef.id);
       setImageUrl('');

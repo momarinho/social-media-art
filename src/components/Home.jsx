@@ -32,6 +32,10 @@ const Home = () => {
   //   return () => unsubscribe();
   // }, []);
 
+  const sortedPosts = posts
+    .slice()
+    .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
+
   return (
     <>
       <Navbar />
@@ -40,21 +44,20 @@ const Home = () => {
       ) : (
         <div className="container mx-auto mt-10">
           <div className="flex flex-wrap justify-center">
-            {posts.map((post) => (
+            {sortedPosts.map((post) => (
               <div
                 key={post.id}
                 className="w-80 bg-white m-4 border border-gray-300 rounded-lg overflow-hidden shadow-md"
               >
-                {isLoading ? (
-                  <Loading />
-                ) : (
+                <Link key={post.id} to={`/posts/${post.id}`}>
                   <img
                     src={post.imageUrl}
                     alt={post.caption}
                     className="w-full h-80 object-cover"
+                    onLoad={() => setIsLoading(false)}
+                    onError={() => setIsLoading(false)}
                   />
-                )}
-
+                </Link>
                 <div className="px-3 pt-3 pb-2">
                   <div className="flex items-center">
                     <img

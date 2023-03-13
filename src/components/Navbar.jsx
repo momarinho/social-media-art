@@ -71,7 +71,7 @@ const Navbar = () => {
                 {showMenu && (
                   <div
                     ref={menuRef}
-                    className="absolute right-8 top-12 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
+                    className="absolute right-16 top-12 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
                   >
                     <Link
                       to="/profile"
