@@ -37,7 +37,6 @@ const Home = () => {
     });
     return () => unsubscribe();
   }, []);
-  
 
   const sortedPosts = posts
     .slice()
@@ -49,7 +48,7 @@ const Home = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="flex justify-center mt-4 mx-auto min-h-screen">
+        <div className="flex justify-center mt-4 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {sortedPosts.map((post) => (
               <div

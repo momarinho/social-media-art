@@ -13,6 +13,7 @@ const PostPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
 
   const [user] = useAuthState(auth);
 
@@ -66,12 +67,13 @@ const PostPage = () => {
           </div>
 
           <div className="flex-1">
-            <div className="flex flex-wrap -mx-4">
+            <div className="flex flex-wrap mx-4">
               <div className="w-full lg:w-1/2 px-4 mb-4 lg:mb-0">
                 <img
                   src={post.imageUrl}
                   alt={post.caption}
-                  className="mx-auto w-auto h-auto object-cover rounded-lg shadow-lg"
+                  className="mx-auto w-auto h-auto object-cover"
+                  style={{ maxHeight: '580px', minHeight: '420px' }}
                   onLoad={() => setIsLoading(false)}
                   onError={() => setIsLoading(false)}
                 />
