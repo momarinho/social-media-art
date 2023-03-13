@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { db, storage, auth } from '../config/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -10,24 +10,13 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 const AddPost = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [caption, setCaption] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userName, setUserName] = useState('');
+  const [uid, setUid] = useState('');
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const [user] = useAuthState(auth);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      setUserEmail(user.email);
-      setUserName(user.displayName);
-    } else {
-      setUserEmail('');
-      setUserName('');
-    }
-  }, [user]);
 
   const handleUpload = (event) => {
     const file = event.target.files[0];
@@ -59,9 +48,10 @@ const AddPost = () => {
       setIsLoading(true);
       const docRef = await addDoc(collection(db, 'posts'), {
         imageUrl,
+        userPhoto: user.photoURL,
+        userName: user.displayName,
         caption,
-        userEmail,
-        userName,
+        uid: user.uid,
         content,
         createdAt: new Date(),
       });
@@ -69,8 +59,7 @@ const AddPost = () => {
       setImageUrl('');
       setCaption('');
       setContent('');
-      setUserEmail('');
-      setUserName('');
+      setUid('');
       setIsLoading(false);
       navigate(-1);
     } catch (error) {

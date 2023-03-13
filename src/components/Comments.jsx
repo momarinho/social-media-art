@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { auth, db } from '../config/firebase';
 import {
   collection,
-  addDoc,
   query,
   where,
   orderBy,
@@ -12,7 +11,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Comments = ({ postId }) => {
   const [user] = useAuthState(auth);
-  const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
 
   useEffect(() => {

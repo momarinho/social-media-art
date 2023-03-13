@@ -9,6 +9,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,13 +25,19 @@ const Home = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const collectionRef = collection(db, 'users');
+    const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setUsers(data);
+    });
+    return () => unsubscribe();
+  }, []);
   
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     setUser(user);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
 
   const sortedPosts = posts
     .slice()
@@ -61,7 +68,7 @@ const Home = () => {
                 <div className="px-3 pt-3 pb-2">
                   <div className="flex items-center">
                     <img
-                      src={post.imageUrl}
+                      src={post.userPhoto}
                       alt="User Profile"
                       className="w-8 h-8 rounded-full object-cover"
                     />

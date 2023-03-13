@@ -39,28 +39,30 @@ const PostPage = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container mx-auto px-4 py-8 flex">
-          <div className="flex mr-4">
-            <button
-              onClick={handleGoBack}
-              type="button"
-              className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-gray-300 shadow-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring focus:border-blue-500"
-            >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row">
+          <div className="flex items-center justify-center">
+            <div className="mb-4 md:mb-0">
+              <button
+                onClick={handleGoBack}
+                type="button"
+                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-gray-300 shadow-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring focus:border-blue-500"
               >
-                <path
-                  d="M15 19L8 12L15 5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 19L8 12L15 5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div className="flex-1">
@@ -69,7 +71,7 @@ const PostPage = () => {
                 <img
                   src={post.imageUrl}
                   alt={post.caption}
-                  className="mx-auto w-full object-cover rounded-lg shadow-lg"
+                  className="mx-auto w-auto h-auto object-cover rounded-lg shadow-lg"
                   onLoad={() => setIsLoading(false)}
                   onError={() => setIsLoading(false)}
                 />
@@ -84,11 +86,11 @@ const PostPage = () => {
                     </div>
                     <div className="flex items-center">
                       <img
-                        src={user?.photoURL}
-                        alt={post.username}
+                        src={post.userPhoto}
+                        alt={post.userName}
                         className="w-10 h-10 rounded-full mr-2 object-cover"
                       />
-                      <p className="font-bold">{post.username}</p>
+                      <p className="font-bold">{post.userName}</p>
                     </div>
                   </div>
 
