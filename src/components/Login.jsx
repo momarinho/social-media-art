@@ -72,7 +72,7 @@ function Login() {
           >
             Log in
           </button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             <Link to="signup">Sign up</Link>
           </button>
           <hr />
