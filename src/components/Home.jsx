@@ -59,22 +59,26 @@ const Home = () => {
                   <img
                     src={post.imageUrl}
                     alt={post.caption}
-                    className="w-full h-96 object-cover"
+                    className="w-full h-96 object-cover hover:scale-105"
                     onLoad={() => setIsLoading(false)}
                     onError={() => setIsLoading(false)}
                   />
                 </Link>
-                <div className="px-3 pt-3 pb-2">
-                  <div className="flex items-center">
+                <Link
+                  key={post.uid}
+                  to={`/profile/${post.uid}`}
+                  className="px-3 pt-3 pb-2"
+                >
+                  <div className="flex items-center ml-2">
                     <img
                       src={post.userPhoto}
                       alt="User Profile"
                       className="w-8 h-8 rounded-full object-cover"
                     />
-                    <p className="ml-2 font-bold text-sm">{post.userName}</p>
+                    <p className="ml-2 text-sm">{post.userName}</p>
                   </div>
-                  <p className="text-sm">{post.caption}</p>
-                </div>
+                  <p className="text-sm text-end mr-4">{post.caption}</p>
+                </Link>
               </div>
             ))}
           </div>

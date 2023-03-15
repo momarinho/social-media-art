@@ -7,18 +7,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
+
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   const menuRef = useRef(null);
-
-  // useEffect(() => {
-  //   auth.onAuthStateChanged((user) => {
-  //     setCurrentUser(user);
-  //   });
-  // }, []);
 
   const handleLoginButtonClick = () => {
     setShowLoginModal(true);
@@ -64,8 +58,12 @@ const Navbar = () => {
               <button>
                 <img
                   className="rounded-full ml-4 cursor-pointer w-10 h-10"
-                  src={user?.photoURL}
-                  alt={user?.displayName}
+                  src={
+                    user.providerData[0].providerId === 'google.com'
+                      ? user.photoURL
+                      : user.userPhoto
+                  }
+                  alt={user.displayName}
                   onClick={() => setShowMenu(!showMenu)}
                 />
                 {showMenu && (
@@ -74,7 +72,8 @@ const Navbar = () => {
                     className="absolute right-16 top-12 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
                   >
                     <Link
-                      to="/profile"
+                      key={user.uid}
+                      to={`/profile/${user.uid}`}
                       className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
                     >
                       My Profile
@@ -110,7 +109,9 @@ const Navbar = () => {
           <div className="flex items-center justify-center min-h-screen px-4">
             <div className="fixed inset-0 bg-gray-500 opacity-75"></div>{' '}
             <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-              <button onClick={handleLoginModalClose}>Close</button>
+              <button onClick={handleLoginModalClose} className="justify-end">
+                X
+              </button>
               <Login />
             </div>
           </div>

@@ -6,16 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Loading from './Loading';
 import Comment from './Comment';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import Comments from './Comments';
 
 const PostPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const [user] = useAuthState(auth);
 
   const navigate = useNavigate();
 

@@ -47,11 +47,11 @@ const AddPost = () => {
     try {
       setIsLoading(true);
       const docRef = await addDoc(collection(db, 'posts'), {
-        imageUrl,
         userPhoto: user.photoURL,
         userName: user.displayName,
-        caption,
         uid: user.uid,
+        imageUrl,
+        caption,
         content,
         createdAt: new Date(),
       });

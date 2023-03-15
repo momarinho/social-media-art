@@ -1,12 +1,16 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { auth } from '../config/firebase';
+import { auth, db, storage } from '../config/firebase';
 import { useNavigate } from 'react-router-dom';
+import { addDoc, collection } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 import Navbar from './Navbar';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [imageUrl, setImageUrl] = useState(null);
 
   let navigate = useNavigate();
 
@@ -36,12 +40,47 @@ const Signup = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log('Created account for:', user.email);
-        navigate('/');
+
+        // Add user profile information to Firestore
+        const profileRef = collection(db, 'profile');
+        const userDoc = {
+          userPhoto: imageUrl,
+          userName: user.displayName,
+          uid: user.uid,
+          bio: '',
+        };
+        addDoc(profileRef, userDoc)
+          .then(() => {
+            navigate('/');
+          })
+          .catch((error) => {
+            console.log(
+              'Error adding user profile information to Firestore:',
+              error
+            );
+          });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log('Error: ', errorCode, errorMessage);
+      });
+  };
+
+  const handleUpload = (e) => {
+    const file = e.target.files[0];
+    const storageRef = ref(storage, 'profile/' + file.name);
+    uploadBytes(storageRef, file)
+      .then((snapshot) => {
+        console.log('Image uploaded successfully');
+        return getDownloadURL(storageRef);
+      })
+      .then((url) => {
+        console.log('Image URL:', url);
+        setImageUrl(url); // set imageUrl state variable
+      })
+      .catch((error) => {
+        console.error('Error uploading image:', error);
       });
   };
 
@@ -73,6 +112,17 @@ const Signup = () => {
                   onChange={handlePasswordChange}
                   className="block w-full p-2 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="********"
+                />
+              </div>
+            </label>
+            
+            <label className="flex flex-col">
+              <span className="text-sm font-medium mb-1">Profile Picture</span>
+              <div className="flex items-center rounded-md shadow-sm">
+                <input
+                  type="file"
+                  onChange={handleUpload}
+                  className="block w-full p-2 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
             </label>

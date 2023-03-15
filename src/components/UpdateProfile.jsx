@@ -1,79 +1,119 @@
-import { useState, useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, storage } from '../config/firebase';
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { db } from '../config/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 import Navbar from './Navbar';
 
 function UpdateProfile() {
-  const [displayName, setDisplayName] = useState('');
+  const { id } = useParams();
+  const history = useHistory();
+  const [user, setUser] = useState({});
+  const [userName, setUserName] = useState('');
+  const [userPhoto, setUserPhoto] = useState('');
   const [bio, setBio] = useState('');
-  const [artwork, setArtwork] = useState(null);
-
-  const [user] = useAuthState(auth);
 
   useEffect(() => {
-    if (user) {
-      setDisplayName(user.displayName || '');
-      setBio(user.bio || '');
-    }
-  }, []);
-
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    try {
-      // Update display name and bio
-      await user.updateProfile({
-        displayName,
-        bio,
-      });
-
-      // Upload artwork to Firebase Storage
-      if (artwork) {
-        const storageRef = storage.ref();
-        const artworkRef = storageRef.child(`users/${user.uid}/artwork`);
-        await artworkRef.put(artwork);
-        const artworkUrl = await artworkRef.getDownloadURL();
-
-        // Update user profile with artwork URL
-        await user.updateProfile({
-          artworkURL: artworkUrl,
-        });
+    const userRef = doc(db, 'users', id);
+    userRef.get().then((doc) => {
+      if (doc.exists()) {
+        const userData = doc.data();
+        setUser(userData);
+        setUserName(userData.userName);
+        setUserPhoto(userData.userPhoto);
+        setBio(userData.bio);
+      } else {
+        console.log('User not found!');
       }
-    } catch (error) {
-      console.error(error);
-    }
+    });
+  }, [id]);
+
+  const handleUserNameChange = (e) => {
+    setUserName(e.target.value);
   };
 
-  const handleArtworkChange = (e) => {
-    setArtwork(e.target.files[0]);
+  const handleUserPhotoChange = (e) => {
+    setUserPhoto(e.target.value);
+  };
+
+  const handleBioChange = (e) => {
+    setBio(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userRef = doc(db, 'users', id);
+    await updateDoc(userRef, {
+      userName,
+      userPhoto,
+      bio,
+    });
+    history.push(`/profile/${id}`);
   };
 
   return (
     <>
       <Navbar />
-      <div>
-        <h2>Update Profile</h2>
-        <form onSubmit={handleUpdateProfile}>
-          <label>
-            Display Name:
-            <input
-              type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
-          </label>
-          <label>
-            Bio:
-            <textarea
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-            ></textarea>
-          </label>
-          <label>
-            Artwork:
-            <input type="file" onChange={handleArtworkChange} />
-          </label>
-          <button type="submit">Update Profile</button>
-        </form>
+      <div className="bg-gray-100 min-h-screen">
+        <div className="container mx-auto p-4">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="userName"
+              >
+                Username
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="userName"
+                type="text"
+                placeholder="Username"
+                value={userName}
+                onChange={handleUserNameChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="userPhoto"
+              >
+                Profile Picture URL
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="userPhoto"
+                type="text"
+                placeholder="Profile Picture URL"
+                value={userPhoto}
+                onChange={handleUserPhotoChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="bio"
+              >
+                Bio
+              </label>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="bio"
+                placeholder="Tell us about yourself"
+                value={bio}
+                onChange={handleBioChange}
+              ></textarea>
+            </div>
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit
+                "
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );
