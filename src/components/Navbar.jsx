@@ -105,14 +105,28 @@ const Navbar = () => {
         </div>
       </div>
       {showLoginModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4">
-            <div className="fixed inset-0 bg-gray-500 opacity-75"></div>{' '}
-            <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-              <button onClick={handleLoginModalClose} className="justify-end">
-                X
-              </button>
-              <Login />
+        <div className="fixed z-50 inset-0 overflow-y-auto bg-gray-900 bg-opacity-90">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="bg-white w-full max-w-md mx-auto rounded-lg shadow-lg">
+              <div className="flex justify-end pt-4 pr-4">
+                <button
+                  className="text-gray-600 hover:text-gray-900 focus:outline-none focus:text-gray-900 transition ease-in-out duration-150"
+                  onClick={() => setShowLoginModal(false)}
+                >
+                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M6 18L18 6M6 6L18 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="p-6">
+                <Login />
+              </div>
             </div>
           </div>
         </div>

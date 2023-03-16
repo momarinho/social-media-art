@@ -44,7 +44,6 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
       {isLoading ? (
         <Loading />
       ) : (
@@ -59,7 +58,7 @@ const Home = () => {
                   <img
                     src={post.imageUrl}
                     alt={post.caption}
-                    className="w-full h-96 object-cover hover:scale-105"
+                    className="w-full h-96 object-cover hover:scale-110"
                     onLoad={() => setIsLoading(false)}
                     onError={() => setIsLoading(false)}
                   />
@@ -84,7 +83,7 @@ const Home = () => {
           </div>
           {user && (
             <Link to="/add">
-              <div className="fixed bottom-8 right-8 bg-blue-500 w-16 h-16 rounded-full flex justify-center items-center text-white text-3xl font-bold shadow-lg">
+              <div className="fixed bottom-8 right-8 bg-blue-500 w-10 h-10 rounded-full flex justify-center items-center text-white text-3xl font-bold shadow-lg">
                 +
               </div>
             </Link>
