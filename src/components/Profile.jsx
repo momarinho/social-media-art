@@ -2,25 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 import Navbar from './Navbar';
 import Loading from './Loading';
-
-function PostGallery({ posts }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-6 mx-4">
-      {posts.map((post) => (
-        <Link key={post.id} to={`/posts/${post.id}`}>
-          <img
-            key={post.id}
-            src={post.imageUrl}
-            alt={post.title}
-            className="object-cover w-full h-full hover:scale-105 cursor-pointer"
-          />
-        </Link>
-      ))}
-    </div>
-  );
-}
+import PostGallery from './PostGallery';
 
 function Profile() {
   const { id } = useParams();
@@ -82,20 +69,41 @@ function Profile() {
                 </button>
               </div>
               <div className="flex justify-center items-center flex-col">
-                {/* <Link to={`/edit-profile/${id}`}>Edit Profile</Link> */}
+                {/* <Link to={`/update-profile/${id}`}>Edit Profile</Link> */}
 
                 <img
                   src={user.userPhoto}
                   alt={user.userName}
                   className="w-24 h-24 rounded-full mb-4"
                 />
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">
                   {user.userName}
                 </h1>
-                <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                  Bio: {user.bio}
-                </h1>
-                {posts.length > 0 && <PostGallery posts={posts} />}
+                <div className='w-full'>
+                  <Tabs>
+                    <TabList>
+                      <Tab>Gallery</Tab>
+                      <Tab>Bio</Tab>
+                      <Tab>Contact Links</Tab>
+                    </TabList>
+
+                    <TabPanel>
+                      {posts.length > 0 ? (
+                        <PostGallery posts={posts} />
+                      ) : (
+                        <p>No posts to display.</p>
+                      )}
+                    </TabPanel>
+                    <TabPanel>
+                      <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                        Bio: {user.bio}
+                      </h1>
+                    </TabPanel>
+                    <TabPanel>
+                      <p>Contact Links tab content goes here.</p>
+                    </TabPanel>
+                  </Tabs>
+                </div>
               </div>
             </div>
           </div>

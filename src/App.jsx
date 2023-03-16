@@ -19,7 +19,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/add" element={<AddPost />} />
           <Route path="/profile/:id" element={<Profile />} />
-          {/* <Route exact path="/edit-profile/:id" component={UpdateProfile} /> */}
+          {/* <Route exact path="/update-profile/:id" component={UpdateProfile} /> */}
           <Route exact path="/posts/:id" element={<PostScreen />} />
         </Routes>
       </Router>

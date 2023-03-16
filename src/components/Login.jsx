@@ -1,13 +1,7 @@
 import { auth } from '../config/firebase';
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  
-} from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
-function Login() {
- 
-
+const Login = () => {
   const handleGoogleLogin = async (event) => {
     event.preventDefault();
     const provider = new GoogleAuthProvider();
@@ -24,7 +18,7 @@ function Login() {
   return (
     <div className="max-w-md mx-auto my-8 px-4">
       <h2 className="text-3xl font-bold mb-4">Login</h2>
-     
+
       <button className="flex justify-center" onClick={handleGoogleLogin}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,8 +46,7 @@ function Login() {
         </svg>
       </button>
     </div>
-    
   );
-}
+};
 
 export default Login;
