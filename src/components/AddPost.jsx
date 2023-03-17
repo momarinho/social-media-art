@@ -6,6 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import BackButton from './BackButton';
 
 const AddPost = () => {
   const [imageUrl, setImageUrl] = useState('');
@@ -72,6 +73,9 @@ const AddPost = () => {
     <>
       <Navbar />
       <div className="container mx-auto mt-10">
+        <div className="mb-4 md:mb-0">
+          <BackButton />
+        </div>
         <h1 className="text-3xl font-bold mb-5">Add Post</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-5">

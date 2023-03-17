@@ -46,7 +46,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link to="/">
+            <Link to="/" onClick={() => window.scrollTo(0, 0)}>
               <span className="text-white font-bold text-xl">
                 My Illustrator
               </span>
@@ -55,44 +55,51 @@ const Navbar = () => {
 
           <div className="ml-10 flex items-baseline space-x-4">
             {user ? (
-              <button>
-                <img
-                  className="rounded-full ml-4 cursor-pointer w-10 h-10"
-                  src={
-                    user.providerData[0].providerId === 'google.com'
-                      ? user.photoURL
-                      : user.userPhoto
-                  }
-                  alt={user.displayName}
-                  onClick={() => setShowMenu(!showMenu)}
-                />
-                {showMenu && (
-                  <div
-                    ref={menuRef}
-                    className="absolute right-16 top-12 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
-                  >
-                    <Link
-                      key={user.uid}
-                      to={`/profile/${user.uid}`}
-                      className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                    >
-                      My Profile
-                    </Link>
-                    <Link
-                      to="/add"
-                      className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                    >
-                      Add New Post
-                    </Link>
-                    <button
-                      className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                      onClick={() => setShowLogoutModal(true)}
-                    >
-                      Logout
-                    </button>
+              <>
+                <Link to="/add" onClick={() => window.scrollTo(0, 0)}>
+                  <div className="fixed bottom-8 right-8 bg-blue-500 hover:bg-blue-700 w-10 h-10 rounded-full flex justify-center items-center text-white text-2xl font-bold shadow-lg">
+                    +
                   </div>
-                )}
-              </button>
+                </Link>
+                <button>
+                  <img
+                    className="rounded-full ml-4 cursor-pointer w-10 h-10"
+                    src={
+                      user.providerData[0].providerId === 'google.com'
+                        ? user.photoURL
+                        : user.userPhoto
+                    }
+                    alt={user.displayName}
+                    onClick={() => setShowMenu(!showMenu)}
+                  />
+                  {showMenu && (
+                    <div
+                      ref={menuRef}
+                      className="absolute right-16 top-12 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
+                    >
+                      <Link
+                        key={user.uid}
+                        to={`/profile/${user.uid}`}
+                        className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        to="/add"
+                        className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
+                      >
+                        Add New Post
+                      </Link>
+                      <button
+                        className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
+                        onClick={() => setShowLogoutModal(true)}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </button>
+              </>
             ) : (
               <button
                 onClick={handleLoginButtonClick}
