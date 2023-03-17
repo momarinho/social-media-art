@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import { db } from '../config/firebase';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 import Loading from '../components/Loading';
 import Comment from '../components/Comment';
 import Comments from '../components/Comments';
+import Footer from '../components/Footer';
+import LikeButton from '../components/LikeButton';
 
 const PostScreen = () => {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [likes, setLikes] = useState(post.likes || 0);
 
   const navigate = useNavigate();
 
@@ -29,14 +30,6 @@ const PostScreen = () => {
 
   const handleGoBack = () => {
     navigate(-1);
-  };
-
-  const handleLike = async () => {
-    const docRef = doc(db, 'posts', id);
-    const updatedDoc = await updateDoc(docRef, {
-      likes: likes + 1,
-    });
-    setLikes(updatedDoc.data().likes);
   };
 
   return (
@@ -68,14 +61,7 @@ const PostScreen = () => {
                 />
               </svg>
             </button>
-            <button
-              onClick={handleLike}
-              type="button"
-              className="inline-flex items-center justify-center w-12 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-              aria-label="Like"
-            >
-              <span className="font-medium">Like {post.likes}</span>
-            </button>
+            <LikeButton post={post} />
           </div>
 
           <div className="flex-1">
@@ -123,6 +109,7 @@ const PostScreen = () => {
           </div>
         </div>
       )}
+      <Footer />
     </>
   );
 };

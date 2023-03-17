@@ -69,8 +69,6 @@ function Profile() {
                 </button>
               </div>
               <div className="flex justify-center items-center flex-col">
-                {/* <Link to={`/update-profile/${id}`}>Edit Profile</Link> */}
-
                 <img
                   src={user.userPhoto}
                   alt={user.userName}
@@ -79,7 +77,7 @@ function Profile() {
                 <h1 className="text-2xl font-bold text-gray-800 mb-2">
                   {user.userName}
                 </h1>
-                <div className='w-full'>
+                <div className="w-full">
                   <Tabs>
                     <TabList>
                       <Tab>Gallery</Tab>
@@ -96,7 +94,7 @@ function Profile() {
                     </TabPanel>
                     <TabPanel>
                       <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                        Bio: {user.bio}
+                        Bio:
                       </h1>
                     </TabPanel>
                     <TabPanel>

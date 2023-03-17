@@ -3,7 +3,6 @@ import { db, auth } from '../config/firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
-import Navbar from './Navbar';
 import Loading from './Loading';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
