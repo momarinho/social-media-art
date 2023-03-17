@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import AddPost from './components/AddPost';
 import Profile from './components/Profile';
 import PostScreen from './screens/PostScreen';
+import ChatBox from './screens/Chatbox';
 // import UpdateProfile from './components/UpdateProfile';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/profile/:id" element={<Profile />} />
           {/* <Route exact path="/update-profile/:id" component={UpdateProfile} /> */}
           <Route exact path="/posts/:id" element={<PostScreen />} />
+          <Route exact path="/chat" element={<ChatBox />} />
         </Routes>
       </Router>
     </div>

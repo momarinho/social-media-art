@@ -1,13 +1,26 @@
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
 
-const Login = () =>  {
+const Login = () => {
   const handleGoogleLogin = async (event) => {
     event.preventDefault();
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider)
-      .then(() => {
-        console.log('Signed in with Google successfully');
+      .then(async (result) => {
+        const user = result.user;
+        const uid = user.uid;
+        const photo = user.photoURL;
+        const username = user.displayName;
+        const usersCollectionRef = collection(db, 'users');
+        const userDocRef = await addDoc(usersCollectionRef, {
+          uid,
+          photo,
+          username,
+        });
+        console.log(
+          `User with ID ${userDocRef.id} added to 'users' collection`
+        );
         window.location.reload();
       })
       .catch((error) => {

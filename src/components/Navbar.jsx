@@ -55,11 +55,16 @@ const Navbar = () => {
 
           <div className="ml-10 flex items-baseline space-x-4">
             {user ? (
-              <>
+              <div className="flex justify-around">
                 <Link to="/add" onClick={() => window.scrollTo(0, 0)}>
-                  <div className="fixed bottom-8 right-8 bg-blue-500 hover:bg-blue-700 w-10 h-10 rounded-full flex justify-center items-center text-white text-2xl font-bold shadow-lg">
+                  <div className="flex justify-center items-center rounded-full ml-4 cursor-pointer w-10 h-10 text-white text-4xl">
                     +
                   </div>
+                </Link>
+                <Link to="/chat" onClick={() => window.scrollTo(0, 0)}>
+                  <p className="flex ml-4 cursor-pointer text-white">
+                    Chat
+                  </p>
                 </Link>
                 <button>
                   <img
@@ -99,7 +104,7 @@ const Navbar = () => {
                     </div>
                   )}
                 </button>
-              </>
+              </div>
             ) : (
               <button
                 onClick={handleLoginButtonClick}
