@@ -53,7 +53,9 @@ const Navbar = () => {
             </Link>
           </div>
           <Link to="/chat" onClick={() => window.scrollTo(0, 0)}>
-            <p className="flex ml-4 cursor-pointer text-white text-xl">Chat</p>
+            <button className="flex items-center ml-4 cursor-pointer text-white text-xl bg-gray-700 hover:bg-gray-800 py-2 px-4 rounded-full">
+              Chat
+            </button>
           </Link>
           <div className="ml-10 flex items-baseline space-x-4">
             {user ? (
