@@ -47,12 +47,14 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" onClick={() => window.scrollTo(0, 0)}>
-              <span className="text-white font-bold text-xl">
+              <span className="font-bold text-xl text-blue-300">
                 My Illustrator
               </span>
             </Link>
           </div>
-
+          <Link to="/chat" onClick={() => window.scrollTo(0, 0)}>
+            <p className="flex ml-4 cursor-pointer text-white text-xl">Chat</p>
+          </Link>
           <div className="ml-10 flex items-baseline space-x-4">
             {user ? (
               <div className="flex justify-around">
@@ -61,11 +63,7 @@ const Navbar = () => {
                     +
                   </div>
                 </Link>
-                <Link to="/chat" onClick={() => window.scrollTo(0, 0)}>
-                  <p className="flex ml-4 cursor-pointer text-white">
-                    Chat
-                  </p>
-                </Link>
+
                 <button>
                   <img
                     className="rounded-full ml-4 cursor-pointer w-10 h-10"

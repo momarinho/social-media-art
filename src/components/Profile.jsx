@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
@@ -15,6 +22,7 @@ function Profile() {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [bio, setBio] = useState('');
 
   useEffect(() => {
     const postsRef = collection(db, 'posts');
@@ -35,6 +43,31 @@ function Profile() {
       unsubscribePost();
     };
   }, [id]);
+
+  useEffect(() => {
+    const usersRef = collection(db, 'users');
+    const userDoc = doc(usersRef, id);
+    const unsubscribeUser = onSnapshot(userDoc, (doc) => {
+      if (doc.exists()) {
+        setUser(doc.data());
+      }
+    });
+
+    return () => {
+      unsubscribeUser();
+    };
+  }, [id, bio]); // Add `bio` to the dependencies array to re-run the effect when the `bio` state changes
+
+  const handleBioSubmit = async (event) => {
+    event.preventDefault();
+    const usersRef = collection(db, 'users');
+    const userDoc = doc(usersRef, id);
+    await updateDoc(userDoc, {
+      bio: bio,
+    });
+    setUser({ ...user, bio: bio }); // Update the `user` state with the new bio value
+    setBio('');
+  };
 
   return (
     <>
@@ -62,7 +95,6 @@ function Profile() {
                     <TabList>
                       <Tab>Gallery</Tab>
                       <Tab>Bio</Tab>
-                      <Tab>Contact Links</Tab>
                     </TabList>
 
                     <TabPanel>
@@ -76,9 +108,23 @@ function Profile() {
                       <h1 className="text-2xl font-bold text-gray-800 mb-2">
                         Bio:
                       </h1>
-                    </TabPanel>
-                    <TabPanel>
-                      <p>Contact Links tab content goes here.</p>
+                      {user.bio ? <p>{user.bio}</p> : <p>No bio available.</p>}
+                      <form onSubmit={handleBioSubmit}>
+                        <label htmlFor="bio">Update Bio:</label>
+                        <input
+                          type="text"
+                          id="bio"
+                          value={bio}
+                          onChange={(event) => setBio(event.target.value)}
+                          className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                        <button
+                          type="submit"
+                          className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          Update
+                        </button>
+                      </form>
                     </TabPanel>
                   </Tabs>
                 </div>

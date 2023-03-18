@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { db } from '../config/firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -8,21 +6,8 @@ import LikeButton from './LikeButton';
 import Loading from './Loading';
 
 const AllPosts = ({ posts }) => {
-  const [users, setUsers] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [sortedPosts, setSortedPosts] = useState([]);
-
-  useEffect(() => {
-    const collectionRef = collection(db, 'users');
-    const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
-      const data = [];
-      querySnapshot.forEach((doc) => {
-        data.push({ ...doc.data(), id: doc.id });
-      });
-      setUsers(data);
-    });
-    return () => unsubscribe();
-  }, []);
 
   useEffect(() => {
     const sortedPosts = posts

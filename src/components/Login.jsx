@@ -1,6 +1,6 @@
 import { auth, db } from '../config/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 
 const Login = () => {
   const handleGoogleLogin = async (event) => {
@@ -10,17 +10,29 @@ const Login = () => {
       .then(async (result) => {
         const user = result.user;
         const uid = user.uid;
-        const photo = user.photoURL;
-        const username = user.displayName;
+        const userPhoto = user.photoURL;
+        const userName = user.displayName;
         const usersCollectionRef = collection(db, 'users');
-        const userDocRef = await addDoc(usersCollectionRef, {
-          uid,
-          photo,
-          username,
-        });
-        console.log(
-          `User with ID ${userDocRef.id} added to 'users' collection`
+
+        // Check if user information already exists in collection
+        const querySnapshot = await getDocs(
+          query(usersCollectionRef, where('uid', '==', uid))
         );
+
+        if (querySnapshot.empty) {
+          // User information does not exist in collection, add new document
+          const userDocRef = await addDoc(usersCollectionRef, {
+            uid,
+            userPhoto,
+            userName,
+          });
+          console.log(
+            `User with ID ${userDocRef.id} added to 'users' collection`
+          );
+        } else {
+          // User information already exists in collection, do something else
+          console.log('User information already exists in collection');
+        }
         window.location.reload();
       })
       .catch((error) => {

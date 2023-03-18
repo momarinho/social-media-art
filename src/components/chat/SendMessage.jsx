@@ -55,7 +55,7 @@ const SendMessage = ({ scroll }) => {
     const { uid, displayName } = auth.currentUser;
     await addDoc(collection(db, 'messages'), {
       text: message,
-      name: displayName,
+      userName: displayName,
       createdAt: serverTimestamp(),
       uid,
     });

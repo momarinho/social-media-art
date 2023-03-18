@@ -34,7 +34,7 @@ const RecentPosts = ({ posts }) => {
               style={{ textDecoration: 'none' }}
             >
               <div
-                className={`bg-white shadow-md mb-4 hover:scale-105 hover:opacity-80 ${
+                className={`bg-white shadow-md mb-4 transform transition-all duration-300 hover:scale-105 hover:opacity-80 ${
                   index === currentIndex ? '' : 'hidden'
                 }`}
                 style={{
@@ -65,7 +65,7 @@ const RecentPosts = ({ posts }) => {
               key={index}
               className={`h-3 w-3 rounded-full mx-1 ${
                 index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
-              }`}
+              } transform transition-all duration-300`}
               style={{
                 textShadow: '1px 1px 4px rgba(0,0,0, 0.9)',
               }}
