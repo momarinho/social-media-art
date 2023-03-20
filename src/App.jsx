@@ -9,6 +9,8 @@ import Profile from './components/Profile';
 import PostScreen from './screens/PostScreen';
 import ChatBox from './screens/Chatbox';
 import SearchPage from './screens/SearchPage';
+import About from './screens/About';
+import Contact from './screens/Contact';
 // import UpdateProfile from './components/UpdateProfile';
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           <Route exact path="/posts/:id" element={<PostScreen />} />
           <Route exact path="/chat" element={<ChatBox />} />
           <Route exact path="/search" element={<SearchPage />} />
+          <Route exact path="/about" element={<About />} />
+          <Route exact path="/contact" element={<Contact />} />
         </Routes>
       </Router>
     </div>
