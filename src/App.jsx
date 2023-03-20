@@ -8,6 +8,7 @@ import AddPost from './components/AddPost';
 import Profile from './components/Profile';
 import PostScreen from './screens/PostScreen';
 import ChatBox from './screens/Chatbox';
+import SearchPage from './screens/SearchPage';
 // import UpdateProfile from './components/UpdateProfile';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           {/* <Route exact path="/update-profile/:id" component={UpdateProfile} /> */}
           <Route exact path="/posts/:id" element={<PostScreen />} />
           <Route exact path="/chat" element={<ChatBox />} />
+          <Route exact path="/search" element={<SearchPage />} />
         </Routes>
       </Router>
     </div>
