@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 import Loading from './Loading';
+import BackButton from './buttons/BackButton';
 
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const collectionRef = collection(db, 'posts');
@@ -22,7 +24,22 @@ const Search = () => {
       setPosts(data);
       setIsLoading(false);
     });
+
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const usersRef = collection(db, 'users');
+    const unsubscribeUser = onSnapshot(usersRef, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setUsers(data);
+      setIsLoading(false);
+    });
+
+    return () => unsubscribeUser();
   }, []);
 
   const searchPosts = () => {
@@ -35,6 +52,11 @@ const Search = () => {
         );
       });
       setPosts(filteredPosts);
+
+      const filteredUsers = users.filter((user) => {
+        return user.displayName.toLowerCase().includes(queryText);
+      });
+      setUsers(filteredUsers);
     } else {
       const collectionRef = collection(db, 'posts');
       const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
@@ -50,10 +72,6 @@ const Search = () => {
 
   const handleSearch = () => {
     searchPosts();
-  };
-
-  const handleBack = () => {
-    navigate(-1);
   };
 
   return isLoading ? (
@@ -97,59 +115,68 @@ const Search = () => {
             </svg>
           </button>
         </div>
-        <button
-          type="button"
-          className="fixed left-4 top-24 items-center flex justify-center w-10 h-10 bg-white rounded-full border border-gray-300 shadow-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring focus:border-blue-500"
-          onClick={handleBack}
-        >
-          <svg
-            className="w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15 19L8 12L15 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-bold mb-4 text-gray-500">All Posts</h2>
+        <div className="m-2">
+          <BackButton />
         </div>
+        <Tabs>
+          <TabList>
+            <Tab>Posts</Tab>
+            <Tab>Users</Tab>
+          </TabList>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mx-4 my-8">
-          {posts.map((post) => (
-            <Link
-              key={post.id}
-              to={`/posts/${post.id}`}
-              className="bg-white rounded-lg shadow-2xl p-24 hover:shadow-xl relative"
-            >
-              <h2 className="text-xl font-bold mb-2">{post.caption}</h2>
-              <p
-                className="mb-4 text-gray-600 line-clamp-3"
-                dangerouslySetInnerHTML={{
-                  __html: `${post.content.substring(0, 100)}...`,
-                }}
-              ></p>
-              <img
-                src={post.imageUrl}
-                alt={post.caption}
-                className="absolute top-0 left-0 w-full h-full object-cover rounded-lg opacity-0 hover:opacity-100"
-                style={{ backgroundColor: 'gray' }}
-              />
+          <TabPanel>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mx-4 my-8">
+              {posts.map((post) => (
+                <Link
+                  key={post.id}
+                  to={`/posts/${post.id}`}
+                  className="bg-white rounded-lg shadow-2xl p-24 hover:shadow-xl relative"
+                >
+                  <h2 className="text-xl font-bold mb-2">{post.caption}</h2>
+                  <p
+                    className="mb-4 text-gray-600 line-clamp-3"
+                    dangerouslySetInnerHTML={{
+                      __html: `${post.content.substring(0, 100)}...`,
+                    }}
+                  ></p>
+                  <img
+                    src={post.imageUrl}
+                    alt={post.caption}
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded-lg opacity-0 hover:opacity-100"
+                    style={{ backgroundColor: 'gray' }}
+                  />
 
-              <div className="flex justify-between items-center">
-                <p className="text-xs text-gray-400">
-                  {new Date(post.createdAt.toDate()).toLocaleString()}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </ul>
+                  <div className="flex justify-between items-center">
+                    <p className="text-xs text-gray-400">
+                      {new Date(post.createdAt.toDate()).toLocaleString()}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </ul>
+          </TabPanel>
+
+          <TabPanel>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-6 mx-4 my-8">
+              {users.map((user) => (
+                <Link
+                  key={user.id}
+                  to={`/profile/${user.uid}`}
+                  className="flex justify-center items-center flex-col shadow-lg rounded-lg"
+                >
+                  <img
+                    src={user.userPhoto}
+                    alt={user.userName}
+                    className="w-24 h-24 rounded-full mb-4"
+                  />
+                  <p className="text-center text-sm text-gray-400">
+                    {user.userName}
+                  </p>
+                </Link>
+              ))}
+            </ul>
+          </TabPanel>
+        </Tabs>
       </div>
     </>
   );

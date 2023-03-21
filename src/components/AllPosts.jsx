@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import LikeButton from './LikeButton';
+import LikeButton from './buttons/LikeButton';
 import Loading from './Loading';
 
 const AllPosts = ({ posts }) => {

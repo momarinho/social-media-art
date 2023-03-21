@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../config/firebase';
+import { auth, db } from '../../config/firebase';
 
 const LikeButton = ({ post }) => {
   const [likes, setLikes] = useState(post.likes || 0);

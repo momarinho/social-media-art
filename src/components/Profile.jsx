@@ -15,14 +15,13 @@ import 'react-tabs/style/react-tabs.css';
 import Navbar from './Navbar';
 import Loading from './Loading';
 import PostGallery from './PostGallery';
-import BackButton from './BackButton';
+import BackButton from './buttons/BackButton';
 
 function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [bio, setBio] = useState('');
 
   useEffect(() => {
     const postsRef = collection(db, 'posts');
@@ -56,18 +55,18 @@ function Profile() {
     return () => {
       unsubscribeUser();
     };
-  }, [id, bio]); // Add `bio` to the dependencies array to re-run the effect when the `bio` state changes
+  }, [id]);
 
-  const handleBioSubmit = async (event) => {
-    event.preventDefault();
-    const usersRef = collection(db, 'users');
-    const userDoc = doc(usersRef, id);
-    await updateDoc(userDoc, {
-      bio: bio,
-    });
-    setUser({ ...user, bio: bio }); // Update the `user` state with the new bio value
-    setBio('');
-  };
+  // const handleBioSubmit = async (event) => {
+  //   event.preventDefault();
+  //   const usersRef = collection(db, 'users');
+  //   const userDoc = doc(usersRef, id);
+  //   await updateDoc(userDoc, {
+  //     bio: bio,
+  //   });
+  //   setUser({ ...user, bio: bio }); // Update the `user` state with the new bio value
+  //   setBio('');
+  // };
 
   return (
     <>
@@ -108,23 +107,7 @@ function Profile() {
                       <h1 className="text-2xl font-bold text-gray-800 mb-2">
                         Bio:
                       </h1>
-                      {user.bio ? <p>{user.bio}</p> : <p>No bio available.</p>}
-                      <form onSubmit={handleBioSubmit}>
-                        <label htmlFor="bio">Update Bio:</label>
-                        <input
-                          type="text"
-                          id="bio"
-                          value={bio}
-                          onChange={(event) => setBio(event.target.value)}
-                          className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
-                        <button
-                          type="submit"
-                          className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                          Update
-                        </button>
-                      </form>
+                      {/* <p>Todo</p> */}
                     </TabPanel>
                   </Tabs>
                 </div>
